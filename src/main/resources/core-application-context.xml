@@ -5,10 +5,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="com"/>
-    <context:property-placeholder location="classpath:*.properties"/>
+    <context:property-placeholder location="classpath:db.properties, classpath:autoPatch.properties"/>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="${driver}"/>
+        <property name="driverClass" value="${driverClass}"/>
         <property name="jdbcUrl" value="${url}"/>
         <property name="user" value="${userName}"/>
         <property name="password" value="${password}"/>
