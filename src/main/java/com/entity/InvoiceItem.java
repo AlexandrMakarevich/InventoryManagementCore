@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,15 +13,10 @@ public class InvoiceItem {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(table = "product", name = "id")
     private Product product;
 
     @Column(name = "product_quantity")
     private Integer productQuantity;
-
-    public InvoiceItem() {
-
-    }
 
     public Integer getId() {
         return id;
@@ -43,5 +40,29 @@ public class InvoiceItem {
 
     public void setProductQuantity(Integer productQuantity) {
         this.productQuantity = productQuantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InvoiceItem that = (InvoiceItem) o;
+        return Objects.equal(id, that.id) &&
+                Objects.equal(product, that.product) &&
+                Objects.equal(productQuantity, that.productQuantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, product, productQuantity);
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceItem{" +
+                "id=" + id +
+                ", product=" + product +
+                ", productQuantity=" + productQuantity +
+                '}';
     }
 }
