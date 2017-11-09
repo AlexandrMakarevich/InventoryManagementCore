@@ -1,7 +1,9 @@
 package com.dao;
 
 import com.entity.Product;
+import org.springframework.stereotype.Repository;
 
+@Repository("productDaoImpl")
 public class ProductDaoImpl extends BaseDao implements ProductDao {
 
     @Override

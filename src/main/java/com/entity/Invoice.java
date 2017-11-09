@@ -4,6 +4,7 @@ import com.constant.InvoiceStatus;
 import com.constant.InvoiceType;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class Invoice {
     @JoinTable(name = "invoice_item_map",
             joinColumns =  @JoinColumn(name = "product_id") ,
             inverseJoinColumns = @JoinColumn(name = "invoice_id"))
-    private List<InvoiceItem> invoiceItems;
+    private List<InvoiceItem> invoiceItems = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -43,8 +44,16 @@ public class Invoice {
         return status;
     }
 
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
+    }
+
     public InvoiceType getType() {
         return type;
+    }
+
+    public void setType(InvoiceType type) {
+        this.type = type;
     }
 
     public Instant getDate() {
