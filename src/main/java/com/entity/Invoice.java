@@ -17,8 +17,8 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @Column(name="status", columnDefinition="ENUM('PENDING', 'COMPLETE', 'ERROR')")
     private InvoiceStatus status = InvoiceStatus.PENDING;
 
     @Column(name = "type")
