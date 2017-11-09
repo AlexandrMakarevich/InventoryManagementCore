@@ -1,10 +1,11 @@
 package com.dao;
 
 import com.BaseTest;
-import com.builder.InvoiceItemBuilder;
-import com.builder.ProductPersistentBuilder;
+import com.builder.InvoiceBuilder;
+import com.builder.InvoiceItemPersistentBuilder;
+import com.entity.Invoice;
 import com.entity.InvoiceItem;
-import com.entity.Product;
+import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,28 +15,28 @@ import javax.annotation.Resource;
 
 public class TestInvoiceDaoImpl extends BaseTest {
 
-    @Resource(name = "invoiceItemDaoImpl")
-    private InvoiceItemDao invoiceItemDao;
+    @Resource(name = "invoiceDaoImpl")
+    private InvoiceDao invoiceDao;
 
-    @Resource(name = "productPersistentBuilder")
-    private ProductPersistentBuilder productPersistentBuilder;
+    @Resource(name = "invoiceItemPersistentBuilder")
+    private InvoiceItemPersistentBuilder invoiceItemPersistentBuilder;
 
-    private InvoiceItemBuilder invoiceItemBuilder;
+    private InvoiceBuilder invoiceBuilder;
 
     @Before
     public void init() {
-        invoiceItemBuilder = new InvoiceItemBuilder();
+        invoiceBuilder = new InvoiceBuilder();
     }
 
     @Test
     @Rollback(false)
-    public void testAddInvoiceItem() {
-        Product product = productPersistentBuilder.buildAndAddProduct();
-        InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
-        int actualId = invoiceItemDao.addInvoiceItem(invoiceItem);
-        InvoiceItem actualInvoiceItem = invoiceItemDao.getById(actualId);
-        System.out.println(invoiceItem);
-        System.out.println(actualInvoiceItem);
-        Assert.assertEquals("ActualInvoiceItem must be equal invoiceItem", actualInvoiceItem, invoiceItem);
+    public void testAddInvoice() {
+        InvoiceItem invoiceItem = invoiceItemPersistentBuilder.buildAndAddInvoiceItem();
+        Invoice invoice = invoiceBuilder.withListInvoiceItems(ImmutableList.of(invoiceItem)).build();
+        invoiceDao.add(invoice);
+        Invoice actualInvoice = invoiceDao.getInvoiceById(invoice.getId());
+        System.out.println(invoice);
+        System.out.println(actualInvoice);
+        Assert.assertEquals("Invoice must be equal actualInvoice", actualInvoice, invoice);
     }
 }

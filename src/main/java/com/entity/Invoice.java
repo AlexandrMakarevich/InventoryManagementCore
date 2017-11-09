@@ -2,6 +2,8 @@ package com.entity;
 
 import com.constant.InvoiceStatus;
 import com.constant.InvoiceType;
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -70,5 +72,34 @@ public class Invoice {
 
     public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
         this.invoiceItems = invoiceItems;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return Objects.equal(id, invoice.id) &&
+                status == invoice.status &&
+                type == invoice.type &&
+                Objects.equal(date, invoice.date) &&
+                Objects.equal(invoiceItems, invoice.invoiceItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, status, type, date, invoiceItems);
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", status=" + status +
+                ", type=" + type +
+                ", date=" + date +
+                ", invoiceItems=" + invoiceItems +
+                '}';
     }
 }
