@@ -1,6 +1,6 @@
 CREATE TABLE `invoice` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `status` ENUM('PENDING', 'COMPLETE', 'ERROR'),
-  `type` VARCHAR(10) NULL,
+  `status` ENUM('PENDING', 'COMPLETE', 'ERROR') DEFAULT 'PENDING',
+  `type` ENUM('INVOICE_IN', 'INVOICE_OUT'),
   `date` TIMESTAMP(3) NOT NULL,
   PRIMARY KEY (`id`))

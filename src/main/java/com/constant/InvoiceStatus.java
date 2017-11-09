@@ -4,5 +4,5 @@ public enum InvoiceStatus {
 
     PENDING,
     COMPLETE,
-    FAIL;
+    ERROR;
 }

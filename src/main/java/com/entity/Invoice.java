@@ -21,7 +21,7 @@ public class Invoice {
     @Column(name="status", columnDefinition="ENUM('PENDING', 'COMPLETE', 'ERROR')")
     private InvoiceStatus status = InvoiceStatus.PENDING;
 
-    @Column(name = "type")
+    @Column(name = "type", columnDefinition = "ENUM('INVOICE_IN', 'INVOICE_OUT')")
     @Enumerated(EnumType.STRING)
     private InvoiceType type;
 
