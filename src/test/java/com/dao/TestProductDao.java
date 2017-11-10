@@ -6,6 +6,8 @@ import com.entity.Product;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.annotation.Rollback;
+
 import javax.annotation.Resource;
 
 public class TestProductDao extends BaseTest {
@@ -26,13 +28,7 @@ public class TestProductDao extends BaseTest {
         Product product = productBuilder.build();
         int expectedId = productDao.addProduct(product);
         Product actualProduct = productDao.getById(expectedId);
-        System.out.println(product);
-        System.out.println(actualProduct);
         Assert.assertEquals("Actual product must be equal expected", actualProduct, product);
     }
 
-    @Test
-    public void test() {
-
-    }
 }

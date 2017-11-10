@@ -4,16 +4,16 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <bean id="autoPatch" class="com.tacitknowledge.util.migration.jdbc.AutoPatchService" init-method="patch">
+    <context:component-scan base-package="com"/>
+    <context:property-placeholder location="classpath:db.properties, classpath:autoPatch.properties"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="autoPatch" class="com.tacitknowledge.util.migration.jdbc.AutoPatchService" init-method="patch" depends-on="dataSource">
         <property name="dataSource" ref="dataSource"/>
         <property name="patchPath" value="${patchPath}"/>
         <property name="systemName" value="${systemName}"/>
         <property name="databaseType" value="${databaseType}"/>
     </bean>
-
-    <context:component-scan base-package="com"/>
-    <context:property-placeholder location="classpath:db.properties, classpath:autoPatch.properties"/>
-    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${driverClass}"/>
@@ -22,18 +22,14 @@
         <property name="password" value="${password}"/>
     </bean>
 
-
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" depends-on="autoPatch">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.entity"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
-                <prop key="show_sql">true</prop>
+                <prop key="show_sql">${show_sql:false}</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/inventory_management</prop>
-                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
             </props>
         </property>
     </bean>
