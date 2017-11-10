@@ -1,9 +1,8 @@
 CREATE TABLE `inventory_state` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
-  `product_name` VARCHAR(45) NOT NULL,
   `quantity` INT NOT NULL,
-  `last_up_date` TIMESTAMP(3) NOT NULL,
+  `state_date` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `index_inventory_state_1` (`product_id` ASC),
   CONSTRAINT `fk_inventory_state_1`

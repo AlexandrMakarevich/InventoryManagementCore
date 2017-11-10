@@ -14,6 +14,6 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
 
     @Override
     public Product getById(int id) {
-        return getSession().load(Product.class, id);
+        return getSession().get(Product.class, id);
     }
 }

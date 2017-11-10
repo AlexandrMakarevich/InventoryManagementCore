@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.google.common.base.Objects;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,8 +18,8 @@ public class InventoryState {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "last_up_date")
-    private LocalDateTime lastUpDate = LocalDateTime.now();
+    @Column(name = "state_date")
+    private LocalDateTime stateDate = LocalDateTime.now();
 
     public Integer getId() {
         return id;
@@ -44,11 +45,37 @@ public class InventoryState {
         this.quantity = quantity;
     }
 
-    public LocalDateTime getLastUpDate() {
-        return lastUpDate;
+    public LocalDateTime getStateDate() {
+        return stateDate;
     }
 
-    public void setLastUpDate(LocalDateTime lastUpDate) {
-        this.lastUpDate = lastUpDate;
+    public void setStateDate(LocalDateTime lastUpDate) {
+        this.stateDate = lastUpDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InventoryState that = (InventoryState) o;
+        return Objects.equal(id, that.id) &&
+                Objects.equal(product, that.product) &&
+                Objects.equal(quantity, that.quantity) &&
+                Objects.equal(stateDate, that.stateDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, product, quantity, stateDate);
+    }
+
+    @Override
+    public String toString() {
+        return "InventoryState{" +
+                "id=" + id +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", lastUpDate=" + stateDate +
+                '}';
     }
 }

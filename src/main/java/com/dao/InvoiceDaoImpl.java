@@ -14,6 +14,6 @@ public class InvoiceDaoImpl extends BaseDao implements InvoiceDao{
 
     @Override
     public Invoice getInvoiceById(int id) {
-        return getSession().load(Invoice.class, id);
+        return getSession().get(Invoice.class, id);
     }
 }
