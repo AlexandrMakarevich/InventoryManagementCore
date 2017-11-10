@@ -5,7 +5,6 @@ import com.constant.InvoiceType;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +20,9 @@ public class Invoice {
     @Column(name="status", columnDefinition="ENUM('PENDING', 'COMPLETE', 'ERROR')")
     private InvoiceStatus status = InvoiceStatus.PENDING;
 
-    @Column(name = "type", columnDefinition = "ENUM('INVOICE_IN', 'INVOICE_OUT')")
+    @Column(name = "type", columnDefinition = "ENUM('IN', 'OUT')")
     @Enumerated(EnumType.STRING)
     private InvoiceType type;
-
-    @Column(name = "date")
-    private Instant date = Instant.now();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "invoice_item_map",
@@ -58,14 +54,6 @@ public class Invoice {
         this.type = type;
     }
 
-    public Instant getDate() {
-        return date;
-    }
-
-    public void setDate(Instant date) {
-        this.date = date;
-    }
-
     public List<InvoiceItem> getInvoiceItems() {
         return invoiceItems;
     }
@@ -73,7 +61,6 @@ public class Invoice {
     public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
         this.invoiceItems = invoiceItems;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -83,13 +70,12 @@ public class Invoice {
         return Objects.equal(id, invoice.id) &&
                 status == invoice.status &&
                 type == invoice.type &&
-                Objects.equal(date, invoice.date) &&
                 Objects.equal(invoiceItems, invoice.invoiceItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, status, type, date, invoiceItems);
+        return Objects.hashCode(id, status, type, invoiceItems);
     }
 
     @Override
@@ -98,7 +84,6 @@ public class Invoice {
                 "id=" + id +
                 ", status=" + status +
                 ", type=" + type +
-                ", date=" + date +
                 ", invoiceItems=" + invoiceItems +
                 '}';
     }

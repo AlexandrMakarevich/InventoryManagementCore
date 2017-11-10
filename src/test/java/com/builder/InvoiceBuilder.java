@@ -17,7 +17,7 @@ public class InvoiceBuilder {
 
     public void init() {
         invoice = new Invoice();
-        invoice.setType(InvoiceType.INVOICE_IN);
+        invoice.setType(InvoiceType.IN);
         invoice.setInvoiceItems(invoiceItems);
     }
 
