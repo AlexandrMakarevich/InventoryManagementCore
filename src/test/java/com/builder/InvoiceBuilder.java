@@ -31,6 +31,11 @@ public class InvoiceBuilder {
         return this;
     }
 
+    public InvoiceBuilder withId(int id) {
+        invoice.setId(id);
+        return this;
+    }
+
     public Invoice build() {
         return invoice;
     }

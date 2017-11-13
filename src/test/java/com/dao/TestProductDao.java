@@ -25,7 +25,7 @@ public class TestProductDao extends BaseTest {
     public void testAddProduct() {
         Product product = productBuilder.build();
         int expectedId = productDao.addProduct(product);
-        Product actualProduct = productDao.getById(expectedId);
+        Product actualProduct = productDao.getById(45);
         System.out.println(product);
         System.out.println(actualProduct);
         Assert.assertEquals("Actual product must be equal expected", actualProduct, product);

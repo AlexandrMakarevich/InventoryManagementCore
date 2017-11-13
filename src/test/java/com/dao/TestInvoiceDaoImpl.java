@@ -9,8 +9,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
-
 import javax.annotation.Resource;
 
 public class TestInvoiceDaoImpl extends BaseTest {
@@ -29,7 +27,7 @@ public class TestInvoiceDaoImpl extends BaseTest {
     }
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void testAddInvoice() {
         InvoiceItem invoiceItem = invoiceItemPersistentBuilder.buildAndAddInvoiceItem();
         Invoice invoice = invoiceBuilder.withListInvoiceItems(ImmutableList.of(invoiceItem)).build();

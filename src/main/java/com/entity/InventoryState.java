@@ -1,6 +1,7 @@
 package com.entity;
 
 import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -59,14 +60,12 @@ public class InventoryState {
         if (o == null || getClass() != o.getClass()) return false;
         InventoryState that = (InventoryState) o;
         return Objects.equal(id, that.id) &&
-                Objects.equal(product, that.product) &&
-                Objects.equal(quantity, that.quantity) &&
-                Objects.equal(stateDate, that.stateDate);
+                Objects.equal(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, product, quantity, stateDate);
+        return Objects.hashCode(id, product);
     }
 
     @Override

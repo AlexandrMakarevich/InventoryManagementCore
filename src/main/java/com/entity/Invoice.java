@@ -3,7 +3,6 @@ package com.entity;
 import com.constant.InvoiceStatus;
 import com.constant.InvoiceType;
 import com.google.common.base.Objects;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +25,8 @@ public class Invoice {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "invoice_item_map",
-            joinColumns =  @JoinColumn(name = "product_id") ,
-            inverseJoinColumns = @JoinColumn(name = "invoice_id"))
+            inverseJoinColumns =  @JoinColumn(name = "invoice_item_id") ,
+            joinColumns = @JoinColumn(name = "invoice_id"))
     private List<InvoiceItem> invoiceItems = new ArrayList<>();
 
     public Integer getId() {
@@ -68,14 +67,12 @@ public class Invoice {
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
         return Objects.equal(id, invoice.id) &&
-                status == invoice.status &&
-                type == invoice.type &&
                 Objects.equal(invoiceItems, invoice.invoiceItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, status, type, invoiceItems);
+        return Objects.hashCode(id, invoiceItems);
     }
 
     @Override

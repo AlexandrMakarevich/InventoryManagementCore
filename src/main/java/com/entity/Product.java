@@ -48,13 +48,12 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return Objects.equal(id, product.id) &&
-                Objects.equal(productName, product.productName) &&
-                Objects.equal(description, product.description);
+                Objects.equal(productName, product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, productName, description);
+        return Objects.hashCode(id, productName);
     }
 
     @Override

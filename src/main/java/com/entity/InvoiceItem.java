@@ -48,13 +48,12 @@ public class InvoiceItem {
         if (o == null || getClass() != o.getClass()) return false;
         InvoiceItem that = (InvoiceItem) o;
         return Objects.equal(id, that.id) &&
-                Objects.equal(product, that.product) &&
-                Objects.equal(productQuantity, that.productQuantity);
+                Objects.equal(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, product, productQuantity);
+        return Objects.hashCode(id, product);
     }
 
     @Override

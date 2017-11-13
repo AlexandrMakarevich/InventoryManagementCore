@@ -22,8 +22,6 @@
         <property name="password" value="${password}"/>
     </bean>
 
-
-
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.entity"/>
@@ -32,8 +30,6 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
                 <prop key="show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/inventory_management</prop>
-                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
             </props>
         </property>
     </bean>
