@@ -3,6 +3,7 @@ package com.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "product")
@@ -17,6 +18,9 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "creation_date")
+    private Instant creationDate;
 
     public Integer getId() {
         return id;
@@ -40,6 +44,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

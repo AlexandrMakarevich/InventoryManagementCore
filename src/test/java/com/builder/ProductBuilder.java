@@ -1,6 +1,7 @@
 package com.builder;
 
 import com.entity.Product;
+import java.time.Instant;
 
 public class ProductBuilder {
 
@@ -10,10 +11,11 @@ public class ProductBuilder {
         init();
     }
 
-    public void init() {
+    private void init() {
         product = new Product();
         product.setProductName("product1");
         product.setDescription("description1");
+        product.setCreationDate(Instant.now());
     }
 
     public ProductBuilder withName(String productName) {
@@ -23,6 +25,11 @@ public class ProductBuilder {
 
     public ProductBuilder withId(int id) {
         product.setId(id);
+        return this;
+    }
+
+    public ProductBuilder withCreationDate(Instant creationDate) {
+        product.setCreationDate(creationDate);
         return this;
     }
 

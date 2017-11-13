@@ -4,14 +4,8 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:test_db.properties, classpath:test_autoPatch.properties"/>
-    <import resource="core-application-context.xml"/>
+    <import resource="classpath:core-application-context.xml"/>
 
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="${driverClass}"/>
-        <property name="jdbcUrl" value="${url}"/>
-        <property name="user" value="${userName}"/>
-        <property name="password" value="${password}"/>
-    </bean>
+    <context:property-placeholder location="classpath:test.properties"/>
 
 </beans>
