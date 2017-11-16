@@ -66,13 +66,12 @@ public class Invoice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return Objects.equal(id, invoice.id) &&
-                Objects.equal(invoiceItems, invoice.invoiceItems);
+        return Objects.equal(id, invoice.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, invoiceItems);
+        return Objects.hashCode(id);
     }
 
     @Override

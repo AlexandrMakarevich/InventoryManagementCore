@@ -1,7 +1,6 @@
 package com.entity;
 
 import com.google.common.base.Objects;
-
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -59,13 +58,12 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equal(id, product.id) &&
-                Objects.equal(productName, product.productName);
+        return Objects.equal(id, product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, productName);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -74,6 +72,7 @@ public class Product {
                 "id=" + id +
                 ", productName='" + productName + '\'' +
                 ", description='" + description + '\'' +
+                ", creationDate=" + creationDate +
                 '}';
     }
 }

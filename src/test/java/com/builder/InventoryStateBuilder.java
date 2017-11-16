@@ -1,25 +1,31 @@
 package com.builder;
 
 import com.entity.InventoryState;
+import com.entity.InventoryStatePK;
 import com.entity.Product;
+
+import java.time.LocalDateTime;
 
 public class InventoryStateBuilder {
 
     private InventoryState inventoryState;
+    private InventoryStatePK inventoryStatePK;
 
     public InventoryStateBuilder() {
         init();
     }
 
     public void init() {
+        inventoryStatePK = new InventoryStatePK();
+        inventoryStatePK.setProduct(new Product());
         inventoryState = new InventoryState();
-        inventoryState.setProduct(new Product());
+        inventoryState.setInventoryStatePK(inventoryStatePK);
         inventoryState.setQuantity(1);
     }
 
 
     public InventoryStateBuilder withProduct(Product product) {
-        inventoryState.setProduct(product);
+        inventoryState.getInventoryStatePK().setProduct(product);
         return this;
     }
 
@@ -28,7 +34,16 @@ public class InventoryStateBuilder {
         return this;
     }
 
+    public InventoryStateBuilder withDate(LocalDateTime localDateTime) {
+        inventoryState.getInventoryStatePK().setStateDate(localDateTime);
+        return this;
+    }
+
     public InventoryState build() {
         return inventoryState;
+    }
+
+    public void reset() {
+        init();
     }
 }

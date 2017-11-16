@@ -35,4 +35,8 @@ public class InvoiceItemBuilder {
    public InvoiceItem build() {
         return invoiceItem;
    }
+
+    public void reset() {
+        init();
+    }
 }

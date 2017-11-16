@@ -22,11 +22,7 @@
         <property name="password" value="${password}"/>
     </bean>
 
-<<<<<<< HEAD
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-=======
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" depends-on="autoPatch">
->>>>>>> sample_uf_how_to_use_instant
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.entity"/>
         <property name="hibernateProperties">
@@ -40,6 +36,7 @@
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="nestedTransactionAllowed" value="true"/>
     </bean>
     
 </beans>

@@ -4,6 +4,9 @@ import com.entity.Invoice;
 import com.entity.InvoiceItem;
 import com.entity.Product;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class InvoiceDaoImpl extends BaseDao implements InvoiceDao{
     private ProductDao productDao;
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public void add(Invoice invoice) {
         checkAndProcessProduct(invoice.getInvoiceItems());
         getSession().save(invoice);

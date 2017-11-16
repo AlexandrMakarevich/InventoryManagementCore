@@ -1,41 +1,27 @@
 package com.entity;
 
 import com.google.common.base.Objects;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "inventory_state")
 public class InventoryState {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @OneToOne
-    private Product product;
+    @EmbeddedId
+    private InventoryStatePK inventoryStatePK;
 
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "state_date")
-    private LocalDateTime stateDate = LocalDateTime.now();
-
-    public Integer getId() {
-        return id;
+    public InventoryStatePK getInventoryStatePK() {
+        return inventoryStatePK;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setInventoryStatePK(InventoryStatePK inventoryStatePK) {
+        this.inventoryStatePK = inventoryStatePK;
     }
 
     public Integer getQuantity() {
@@ -46,35 +32,16 @@ public class InventoryState {
         this.quantity = quantity;
     }
 
-    public LocalDateTime getStateDate() {
-        return stateDate;
-    }
-
-    public void setStateDate(LocalDateTime lastUpDate) {
-        this.stateDate = lastUpDate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InventoryState that = (InventoryState) o;
-        return Objects.equal(id, that.id) &&
-                Objects.equal(product, that.product);
+        return Objects.equal(inventoryStatePK, that.inventoryStatePK);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, product);
-    }
-
-    @Override
-    public String toString() {
-        return "InventoryState{" +
-                "id=" + id +
-                ", product=" + product +
-                ", quantity=" + quantity +
-                ", lastUpDate=" + stateDate +
-                '}';
+        return Objects.hashCode(inventoryStatePK);
     }
 }

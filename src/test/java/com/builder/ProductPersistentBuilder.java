@@ -8,12 +8,13 @@ import javax.annotation.Resource;
 @Service("productPersistentBuilder")
 public class ProductPersistentBuilder {
 
-    private ProductBuilder productBuilder = new ProductBuilder();
+    private ProductBuilder productBuilder;
 
     @Resource(name = "productDaoImpl")
     private ProductDao productDao;
 
     public Product buildAndAddProduct() {
+        productBuilder = new ProductBuilder();
         Product product = productBuilder.build();
         productDao.addProduct(product);
         return product;
