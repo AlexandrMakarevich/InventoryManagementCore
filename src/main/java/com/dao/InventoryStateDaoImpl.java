@@ -16,7 +16,7 @@ public class InventoryStateDaoImpl extends BaseDao implements InventoryStateDao 
     }
 
     @Override
-    public InventoryState getInventoryStateById(InventoryStatePK inventoryStatePK) {
+    public InventoryState getInventoryStateByPK(InventoryStatePK inventoryStatePK) {
         return getSession().get(InventoryState.class, inventoryStatePK);
     }
 

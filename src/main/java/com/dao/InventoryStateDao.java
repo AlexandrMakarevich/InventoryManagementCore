@@ -9,7 +9,7 @@ public interface InventoryStateDao {
 
     void add(InventoryState inventoryState);
 
-    InventoryState getInventoryStateById(InventoryStatePK inventoryStatePK);
+    InventoryState getInventoryStateByPK(InventoryStatePK inventoryStatePK);
 
     InventoryState getInventoryStateByProductIdWhereMaxStateDate(InvoiceItem invoiceItem);
 

@@ -39,6 +39,11 @@ public class InventoryStateBuilder {
         return this;
     }
 
+    public InventoryStateBuilder withInventoryStatePK(InventoryStatePK inventoryStatePK) {
+        inventoryState.setInventoryStatePK(inventoryStatePK);
+        return this;
+    }
+
     public InventoryState build() {
         return inventoryState;
     }

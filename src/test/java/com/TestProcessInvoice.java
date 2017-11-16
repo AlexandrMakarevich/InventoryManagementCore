@@ -13,8 +13,9 @@ import com.entity.Product;
 import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
+import org.junit.rules.ExpectedException;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -38,6 +39,9 @@ public class TestProcessInvoice extends BaseTest {
     private InvoiceBuilder invoiceBuilder;
     private InventoryStateBuilder inventoryStateBuilder;
     private InvoiceItemBuilder invoiceItemBuilder;
+
+    @Rule
+    public ExpectedException testRuleException = ExpectedException.none();
 
     @Before
     public void init() {
@@ -146,7 +150,7 @@ public class TestProcessInvoice extends BaseTest {
     }
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void testWhenInvoiceHasTwoTheSameProduct() {
         Product product = productPersistentBuilder.buildAndAddProduct();
 
@@ -166,9 +170,43 @@ public class TestProcessInvoice extends BaseTest {
                 .withListInvoiceItems(ImmutableList.of(invoiceItem, invoiceItem1))
                 .build();
 
+        this.testRuleException.expect(IllegalStateException.class);
+        this.testRuleException.expectMessage("You have duplicate product in invoice.Check your data.");
+
         processInvoice.process(invoice);
 
+    }
 
+    @Test
+    public void testWhenInvoiceHasTwoTheSameProductAndInventoryStateAlreadyHasThisProduct() {
+        Product product = productPersistentBuilder.buildAndAddProduct();
+
+        InventoryState inventoryState = inventoryStateBuilder
+                .withProduct(product)
+                .withQuantity(22)
+                .build();
+        inventoryStateDao.add(inventoryState);
+
+        InvoiceItem invoiceItem = invoiceItemBuilder
+                .withProduct(product)
+                .withProductQuantity(34)
+                .build();
+
+        invoiceItemBuilder.reset();
+
+        InvoiceItem invoiceItem1 = invoiceItemBuilder
+                .withProduct(product)
+                .withProductQuantity(65)
+                .build();
+
+        Invoice invoice = invoiceBuilder
+                .withListInvoiceItems(ImmutableList.of(invoiceItem, invoiceItem1))
+                .build();
+
+        this.testRuleException.expect(IllegalStateException.class);
+        this.testRuleException.expectMessage("You have duplicate product in invoice.Check your data.");
+
+        processInvoice.process(invoice);
     }
 
     @Test
