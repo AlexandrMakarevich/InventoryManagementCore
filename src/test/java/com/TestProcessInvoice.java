@@ -10,17 +10,24 @@ import com.entity.InventoryState;
 import com.entity.Invoice;
 import com.entity.InvoiceItem;
 import com.entity.Product;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import org.junit.Assert;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestProcessInvoice extends BaseTest {
 
@@ -51,127 +58,77 @@ public class TestProcessInvoice extends BaseTest {
     }
 
     @Test
-//    @Rollback(false)
 //    This test is done to check the case when the table inventory_state is empty
     public void testInventoryStateWithoutProduct() {
         Product product = productPersistentBuilder.buildAndAddProduct();
         Product product1 = productPersistentBuilder.buildAndAddProduct();
-
-        InvoiceItem invoiceItem = invoiceItemBuilder
-                .withProduct(product)
-                .withProductQuantity(3)
-                .build();
-
-        invoiceItemBuilder.reset();
-
-        InvoiceItem invoiceItem1 = invoiceItemBuilder
-                .withProduct(product1)
-                .withProductQuantity(4)
-                .build();
-
-        List<InvoiceItem> invoiceItems = ImmutableList.of(invoiceItem, invoiceItem1);
-        Invoice invoice = invoiceBuilder.withListInvoiceItems(invoiceItems).build();
-        invoiceDao.add(invoice);
+        Map<Product, Integer> productsQuantity = ImmutableMap.of(product, 3, product1, 4);
+        Invoice invoice = createTestInvoice(productsQuantity);
 
         processInvoice.process(invoice);
-        List<Integer> productIdList = processInvoice.getAllProductId(invoiceItems);
-        List<InventoryState> actualInventoryStates = inventoryStateDao.getInventoryStates(productIdList);
-
-        InventoryState inventoryState = inventoryStateDao.getInventoryStateByProductIdWhereMaxStateDate(invoiceItem);
-        InventoryState inventoryState1 = inventoryStateDao.getInventoryStateByProductIdWhereMaxStateDate(invoiceItem1);
-
-        Assert.assertEquals("Actual result must be expected", inventoryState.getQuantity(), invoiceItem.getProductQuantity());
-        Assert.assertEquals("Actual result must be expected", inventoryState1.getQuantity(), invoiceItem1.getProductQuantity());
+        assertInventoryState(productsQuantity, invoice);
     }
 
     @Test
-//    @Rollback(false)
     public void testWhenInventoryStateIsPresent() {
         Product product = productPersistentBuilder.buildAndAddProduct();
-        InventoryState inventoryState = inventoryStateBuilder
-                .withDate(LocalDateTime.parse("2017-11-14T20:00:10.976"))
-                .withProduct(product)
-                .build();
-        inventoryStateDao.add(inventoryState);
-
-        InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
-        Invoice invoice = invoiceBuilder.withListInvoiceItems(ImmutableList.of(invoiceItem)).build();
+        int alreadyExistProductQuantity = 5;
+        Map<Product, Integer> existingProductQuantities = ImmutableMap.of(product, alreadyExistProductQuantity);
+        addInventoryState(existingProductQuantities);
+        int invoiceProductQuantity = 7;
+        Map<Product, Integer> productsQuantity = ImmutableMap.of(product, invoiceProductQuantity);
+        Invoice invoice = createTestInvoice(productsQuantity);
 
         processInvoice.process(invoice);
 
-        List<Integer> productIdList = processInvoice.getAllProductId(invoice.getInvoiceItems());
-        List<InventoryState> actualInventoryStates = inventoryStateDao.getInventoryStates(productIdList);
-
-        Product actualProduct = actualInventoryStates.get(0).getInventoryStatePK().getProduct();
-        Assert.assertEquals("Actual result must be expected", actualProduct, product);
+        Map<Product, Integer> expectedProductQuantities = ImmutableMap.of(
+                product, alreadyExistProductQuantity + invoiceProductQuantity);
+        assertInventoryState(expectedProductQuantities, invoice);
     }
 
     @Test
     public void testWhenOneOfTheTwoProductIsPresentInInventoryStateTable() {
-        Product product = productPersistentBuilder.buildAndAddProduct();
+        int invoiceProduct1Quantity = 3;
         Product product1 = productPersistentBuilder.buildAndAddProduct();
+        int invoiceProduct2Quantity = 8;
+        Product product2 = productPersistentBuilder.buildAndAddProduct();
+        Map<Product, Integer> productsQuantity = ImmutableMap.of(
+                product1, invoiceProduct1Quantity,
+                product2, invoiceProduct2Quantity);
+        Invoice invoice = createTestInvoice(productsQuantity);
 
-        InventoryState inventoryState = inventoryStateBuilder
-                .withDate(LocalDateTime.parse("2016-10-14T20:00:10.976"))
-                .withProduct(product)
-                .withQuantity(7)
-                .build();
-        inventoryStateDao.add(inventoryState);
-
-        InvoiceItem invoiceItem = invoiceItemBuilder
-                .withProduct(product)
-                .withProductQuantity(35)
-                .build();
-
-        invoiceItemBuilder.reset();
-
-        InvoiceItem invoiceItem1 = invoiceItemBuilder
-                .withProduct(product1)
-                .withProductQuantity(16)
-                .build();
-
-        Invoice invoice = invoiceBuilder
-                .withListInvoiceItems(ImmutableList.of(invoiceItem, invoiceItem1))
-                .build();
+        int existingProduct1Quantity = 11;
+        Map<Product, Integer> inventoryStateProductQuantity = ImmutableMap.of(
+                product1, existingProduct1Quantity
+        );
+        addInventoryState(inventoryStateProductQuantity);
 
         processInvoice.process(invoice);
+        assertInventoryState(ImmutableMap.of(
+                product1, invoiceProduct1Quantity + existingProduct1Quantity,
+                product2, invoiceProduct2Quantity),
+                invoice);
+    }
 
-        InventoryState actualInventoryState = inventoryStateDao
-                .getInventoryStateByProductIdWhereMaxStateDate(invoiceItem);
-        InventoryState actualInventoryState1 = inventoryStateDao
-                .getInventoryStateByProductIdWhereMaxStateDate(invoiceItem1);
-
-        Integer expectedQuantity = invoiceItem.getProductQuantity() + inventoryState.getQuantity();
-
-        Assert.assertEquals("Actual result must be expected",
-                actualInventoryState.getQuantity(), expectedQuantity);
-        Assert.assertEquals("Actual result must be expected",
-                actualInventoryState1.getQuantity(), invoiceItem1.getProductQuantity());
+    private void addInventoryState(Map<Product, Integer> inventoryStateProductQuantities) {
+        for (Map.Entry<Product, Integer> entry : inventoryStateProductQuantities.entrySet()) {
+            InventoryState inventoryState = inventoryStateBuilder
+                    .withProduct(entry.getKey())
+                    .withQuantity(entry.getValue())
+                    .build();
+            inventoryStateDao.add(inventoryState);
+        }
     }
 
     @Test
-//    @Rollback(false)
     public void testWhenInvoiceHasTwoTheSameProduct() {
-        Product product = productPersistentBuilder.buildAndAddProduct();
+        this.testRuleException.expect(IllegalArgumentException.class);
+//        this.testRuleException.expectMessage("You have duplicate product in invoice.Check your data.");
 
-        InvoiceItem invoiceItem = invoiceItemBuilder
-                .withProduct(product)
-                .withProductQuantity(34)
-                .build();
-
-        invoiceItemBuilder.reset();
-
-        InvoiceItem invoiceItem1 = invoiceItemBuilder
-                .withProduct(product)
-                .withProductQuantity(65)
-                .build();
-
-        Invoice invoice = invoiceBuilder
-                .withListInvoiceItems(ImmutableList.of(invoiceItem, invoiceItem1))
-                .build();
-
-        this.testRuleException.expect(IllegalStateException.class);
-        this.testRuleException.expectMessage("You have duplicate product in invoice.Check your data.");
+        Product product1 = productPersistentBuilder.buildAndAddProduct();
+        Invoice invoice = createTestInvoice(ImmutableMap.of(
+                product1, 12,
+                product1, 22));
 
         processInvoice.process(invoice);
 
@@ -230,4 +187,37 @@ public class TestProcessInvoice extends BaseTest {
         List<Integer> listOfProductId = processInvoice.getAllProductId(invoiceItems);
         System.out.println(listOfProductId);
     }
+
+    private void assertInventoryState(Map<Product, Integer> productsQuantity, Invoice invoice) {
+        List<Integer> productIdList = processInvoice.getAllProductId(invoice.getInvoiceItems());
+        List<InventoryState> actualInventoryStates = inventoryStateDao.getInventoryStates(productIdList);
+        assertEquals("actualInventoryStates must be the same size as productsQuantity", productsQuantity.size(), actualInventoryStates.size());
+        for (Map.Entry<Product, Integer> productQuantity: productsQuantity.entrySet()) {
+            Optional<InventoryState> actualInventoryState = Iterables.tryFind(actualInventoryStates, new Predicate<InventoryState>() {
+                @Override
+                public boolean apply(InventoryState inventoryState) {
+                    return inventoryState.getInventoryStatePK().getProduct().equals(productQuantity.getKey());
+                }
+            });
+            assertTrue("actualInventoryState must be found for product " + productQuantity.getKey(), actualInventoryState.isPresent());
+            assertEquals("Product quantity must be as expected", productQuantity.getValue(), actualInventoryState.get().getQuantity());
+
+        }
+    }
+
+    private Invoice createTestInvoice(Map<Product, Integer> products) {
+        List<InvoiceItem> invoiceItems = new ArrayList<>(products.size());
+        for(Map.Entry<Product, Integer> entry : products.entrySet()) {
+            InvoiceItem invoiceItem = invoiceItemBuilder
+                    .withProduct(entry.getKey())
+                    .withProductQuantity(entry.getValue())
+                    .build();
+            invoiceItemBuilder.reset();
+            invoiceItems.add(invoiceItem);
+        }
+        Invoice invoice = invoiceBuilder.withListInvoiceItems(invoiceItems).build();
+        invoiceDao.add(invoice);
+        return invoice;
+    }
+
 }
