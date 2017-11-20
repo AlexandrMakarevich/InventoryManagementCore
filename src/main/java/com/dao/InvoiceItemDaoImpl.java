@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 public class InvoiceItemDaoImpl extends BaseDao implements InvoiceItemDao {
 
     @Override
-    public int addInvoiceItem(InvoiceItem invoiceItem) {
+    public int saveInvoiceItem(InvoiceItem invoiceItem) {
         getSession().save(invoiceItem);
         return invoiceItem.getId();
     }
 
     @Override
-    public InvoiceItem getById(int id) {
+    public InvoiceItem getInvoiceItemById(int id) {
         return getSession().get(InvoiceItem.class, id);
     }
 }

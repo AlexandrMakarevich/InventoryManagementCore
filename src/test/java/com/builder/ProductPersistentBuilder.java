@@ -16,7 +16,7 @@ public class ProductPersistentBuilder {
     public Product buildAndAddProduct() {
         productBuilder = new ProductBuilder();
         Product product = productBuilder.build();
-        productDao.addProduct(product);
+        productDao.saveProduct(product);
         return product;
     }
 }

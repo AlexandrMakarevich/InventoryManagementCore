@@ -25,16 +25,16 @@ public class TestProductDao extends BaseTest {
 //    @Rollback(false)
     public void testAddProduct() {
         Product product = productBuilder.build();
-        int expectedId = productDao.addProduct(product);
-        Product actualProduct = productDao.getById(expectedId);
+        int expectedId = productDao.saveProduct(product);
+        Product actualProduct = productDao.getProductById(expectedId);
         Assert.assertEquals("Actual product must be equal expected", actualProduct, product);
     }
 
     @Test
     public void testAddProductTime() {
         Product product = productBuilder.build();
-        int expectedId = productDao.addProduct(product);
-        Product actualProduct = productDao.getById(expectedId);
+        int expectedId = productDao.saveProduct(product);
+        Product actualProduct = productDao.getProductById(expectedId);
         Assert.assertEquals("Time of creation product must be equal",
                 actualProduct.getCreationDate(),
                 product.getCreationDate());

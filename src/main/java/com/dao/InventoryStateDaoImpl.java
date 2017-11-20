@@ -11,7 +11,7 @@ import java.util.List;
 public class InventoryStateDaoImpl extends BaseDao implements InventoryStateDao {
 
     @Override
-    public void add(InventoryState inventoryState) {
+    public void saveInventoryState(InventoryState inventoryState) {
         getSession().save(inventoryState);
     }
 

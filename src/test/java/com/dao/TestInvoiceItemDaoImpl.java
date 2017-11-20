@@ -31,8 +31,8 @@ public class TestInvoiceItemDaoImpl extends BaseTest {
     public void testAddInvoiceItem() {
         Product product = productPersistentBuilder.buildAndAddProduct();
         InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
-        int actualId = invoiceItemDao.addInvoiceItem(invoiceItem);
-        InvoiceItem actualInvoiceItem = invoiceItemDao.getById(actualId);
+        int actualId = invoiceItemDao.saveInvoiceItem(invoiceItem);
+        InvoiceItem actualInvoiceItem = invoiceItemDao.getInvoiceItemById(actualId);
         System.out.println(invoiceItem);
         System.out.println(actualInvoiceItem);
         Assert.assertEquals("ActualInvoiceItem must be equal invoiceItem", actualInvoiceItem, invoiceItem);

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface InventoryStateDao {
 
-    void add(InventoryState inventoryState);
+    void saveInventoryState(InventoryState inventoryState);
 
     InventoryState getInventoryStateByPK(InventoryStatePK inventoryStatePK);
 

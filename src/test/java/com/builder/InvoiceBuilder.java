@@ -3,13 +3,13 @@ package com.builder;
 import com.constant.InvoiceType;
 import com.entity.Invoice;
 import com.entity.InvoiceItem;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InvoiceBuilder {
 
     private Invoice invoice;
-    private List<InvoiceItem> invoiceItems = new ArrayList<>();
+    private Set<InvoiceItem> invoiceItems = new HashSet<>();
 
     public InvoiceBuilder() {
         init();
@@ -21,7 +21,7 @@ public class InvoiceBuilder {
         invoice.setInvoiceItems(invoiceItems);
     }
 
-    public InvoiceBuilder withListInvoiceItems(List<InvoiceItem> invoiceItems) {
+    public InvoiceBuilder withSetInvoiceItems(Set<InvoiceItem> invoiceItems) {
         invoice.getInvoiceItems().addAll(invoiceItems);
         return this;
     }

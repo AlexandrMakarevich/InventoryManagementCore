@@ -38,7 +38,7 @@ public class TestInventoryStateDaoImpl extends BaseTest {
         Product product = productPersistentBuilder.buildAndAddProduct();
 
         InventoryState inventoryState = inventoryStateBuilder.withProduct(product).build();
-        inventoryStateDao.add(inventoryState);
+        inventoryStateDao.saveInventoryState(inventoryState);
 
         InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
 
@@ -60,7 +60,7 @@ public class TestInventoryStateDaoImpl extends BaseTest {
                 .withInventoryStatePK(inventoryStatePK)
                 .build();
 
-        inventoryStateDao.add(inventoryState);
+        inventoryStateDao.saveInventoryState(inventoryState);
 
         InventoryState actualInventoryState = inventoryStateDao
                 .getInventoryStateByPK(inventoryStatePK);

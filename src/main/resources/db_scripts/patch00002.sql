@@ -2,5 +2,4 @@ CREATE TABLE `invoice` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `status` ENUM('PENDING', 'COMPLETE', 'ERROR') NOT NULL,
   `type` ENUM('IN', 'OUT') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+  PRIMARY KEY (`id`))

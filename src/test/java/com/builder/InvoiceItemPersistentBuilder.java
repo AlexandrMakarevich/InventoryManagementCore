@@ -23,7 +23,7 @@ public class InvoiceItemPersistentBuilder {
         invoiceItemBuilder = new InvoiceItemBuilder();
         Product product = productPersistentBuilder.buildAndAddProduct();
         InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
-        invoiceItemDao.addInvoiceItem(invoiceItem);
+        invoiceItemDao.saveInvoiceItem(invoiceItem);
         return invoiceItem;
     }
 }

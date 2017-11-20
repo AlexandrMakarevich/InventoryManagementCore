@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 public class ProductDaoImpl extends BaseDao implements ProductDao {
 
     @Override
-    public int addProduct(Product product) {
+    public int saveProduct(Product product) {
         getSession().save(product);
         return product.getId();
     }
 
     @Override
-    public Product getById(int id) {
+    public Product getProductById(int id) {
         return getSession().get(Product.class, id);
     }
 }

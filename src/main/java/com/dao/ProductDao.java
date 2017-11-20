@@ -4,7 +4,7 @@ import com.entity.Product;
 
 public interface ProductDao {
 
-    int addProduct(Product product);
+    int saveProduct(Product product);
 
-    Product getById(int id);
+    Product getProductById(int id);
 }

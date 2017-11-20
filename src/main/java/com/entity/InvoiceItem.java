@@ -47,12 +47,12 @@ public class InvoiceItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InvoiceItem that = (InvoiceItem) o;
-        return Objects.equal(id, that.id);
+        return Objects.equal(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(product);
     }
 
     @Override

@@ -21,6 +21,7 @@ public class InventoryStateBuilder {
         inventoryState = new InventoryState();
         inventoryState.setInventoryStatePK(inventoryStatePK);
         inventoryState.setQuantity(1);
+        inventoryStatePK.setStateDate(LocalDateTime.now().minusDays(1));
     }
 
 

@@ -5,11 +5,12 @@ import com.builder.InvoiceBuilder;
 import com.builder.InvoiceItemPersistentBuilder;
 import com.entity.Invoice;
 import com.entity.InvoiceItem;
-import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TestInvoiceDaoImpl extends BaseTest {
 
@@ -30,8 +31,10 @@ public class TestInvoiceDaoImpl extends BaseTest {
 //    @Rollback(false)
     public void testAddInvoice() {
         InvoiceItem invoiceItem = invoiceItemPersistentBuilder.buildAndAddInvoiceItem();
-        Invoice invoice = invoiceBuilder.withListInvoiceItems(ImmutableList.of(invoiceItem)).build();
-        invoiceDao.add(invoice);
+        Set<InvoiceItem> invoiceItems = new HashSet<>();
+        invoiceItems.add(invoiceItem);
+        Invoice invoice = invoiceBuilder.withSetInvoiceItems(invoiceItems).build();
+        invoiceDao.saveInvoice(invoice);
         Invoice actualInvoice = invoiceDao.getInvoiceById(invoice.getId());
         System.out.println(invoice);
         System.out.println(actualInvoice);

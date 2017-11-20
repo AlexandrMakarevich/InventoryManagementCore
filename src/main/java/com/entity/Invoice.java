@@ -4,8 +4,8 @@ import com.constant.InvoiceStatus;
 import com.constant.InvoiceType;
 import com.google.common.base.Objects;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "invoice")
@@ -25,9 +25,9 @@ public class Invoice {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "invoice_item_map",
-            inverseJoinColumns =  @JoinColumn(name = "invoice_item_id") ,
+            inverseJoinColumns =  @JoinColumn(name = "invoice_item_id"),
             joinColumns = @JoinColumn(name = "invoice_id"))
-    private List<InvoiceItem> invoiceItems = new ArrayList<>();
+    private Set<InvoiceItem> invoiceItems = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -53,11 +53,11 @@ public class Invoice {
         this.type = type;
     }
 
-    public List<InvoiceItem> getInvoiceItems() {
+    public Set<InvoiceItem> getInvoiceItems() {
         return invoiceItems;
     }
 
-    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+    public void setInvoiceItems(Set<InvoiceItem> invoiceItems) {
         this.invoiceItems = invoiceItems;
     }
 

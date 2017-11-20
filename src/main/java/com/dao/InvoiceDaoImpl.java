@@ -4,11 +4,9 @@ import com.entity.Invoice;
 import com.entity.InvoiceItem;
 import com.entity.Product;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Set;
 
 @Repository("invoiceDaoImpl")
 public class InvoiceDaoImpl extends BaseDao implements InvoiceDao{
@@ -17,8 +15,7 @@ public class InvoiceDaoImpl extends BaseDao implements InvoiceDao{
     private ProductDao productDao;
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
-    public void add(Invoice invoice) {
+    public void saveInvoice(Invoice invoice) {
         checkAndProcessProduct(invoice.getInvoiceItems());
         getSession().save(invoice);
     }
@@ -28,14 +25,14 @@ public class InvoiceDaoImpl extends BaseDao implements InvoiceDao{
         return getSession().get(Invoice.class, id);
     }
 
-    private void checkAndProcessProduct(List<InvoiceItem> invoiceItems) {
-        if (invoiceItems.size() == 0) {
+    private void checkAndProcessProduct(Set<InvoiceItem> invoiceItems) {
+        if (invoiceItems.isEmpty()) {
             throw new IllegalStateException("Invoice must have at least one product");
         }
         for (InvoiceItem invoiceItem : invoiceItems) {
             Product product = invoiceItem.getProduct();
-            if (productDao.getById(product.getId()) == null) {
-                productDao.addProduct(product);
+            if (productDao.getProductById(product.getId()) == null) {
+                productDao.saveProduct(product);
             }
         }
     }
