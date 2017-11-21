@@ -1,7 +1,7 @@
 package com.dao;
 
 import com.BaseTest;
-import com.builder.InvoiceBuilder;
+import com.builder.InvoiceINBuilder;
 import com.builder.InvoiceItemPersistentBuilder;
 import com.entity.Invoice;
 import com.entity.InvoiceItem;
@@ -20,11 +20,11 @@ public class TestInvoiceDaoImpl extends BaseTest {
     @Resource(name = "invoiceItemPersistentBuilder")
     private InvoiceItemPersistentBuilder invoiceItemPersistentBuilder;
 
-    private InvoiceBuilder invoiceBuilder;
+    private InvoiceINBuilder invoiceINBuilder;
 
     @Before
     public void init() {
-        invoiceBuilder = new InvoiceBuilder();
+        invoiceINBuilder = new InvoiceINBuilder();
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestInvoiceDaoImpl extends BaseTest {
         InvoiceItem invoiceItem = invoiceItemPersistentBuilder.buildAndAddInvoiceItem();
         Set<InvoiceItem> invoiceItems = new HashSet<>();
         invoiceItems.add(invoiceItem);
-        Invoice invoice = invoiceBuilder.withSetInvoiceItems(invoiceItems).build();
+        Invoice invoice = invoiceINBuilder.withSetInvoiceItems(invoiceItems).build();
         invoiceDao.saveInvoice(invoice);
         Invoice actualInvoice = invoiceDao.getInvoiceById(invoice.getId());
         System.out.println(invoice);

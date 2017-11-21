@@ -1,9 +1,11 @@
-package com.process;
+package com.entity;
 
-import com.entity.InventoryState;
-import com.entity.InvoiceItem;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class ProcessIncomingInvoice implements ProcessInvoiceProductQuantity {
+@Entity
+@DiscriminatorValue("IN")
+public class InvoiceIN extends Invoice {
 
     @Override
     public Integer processProductQuantity(InvoiceItem invoiceItem, InventoryState inventoryState) {

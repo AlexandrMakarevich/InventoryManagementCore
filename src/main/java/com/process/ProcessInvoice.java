@@ -1,8 +1,6 @@
 package com.process;
 
-import com.constant.InvoiceType;
 import com.dao.InventoryStateDao;
-import com.dao.InvoiceDao;
 import com.entity.InventoryState;
 import com.entity.InventoryStatePK;
 import com.entity.Invoice;
@@ -21,13 +19,8 @@ import java.util.Set;
 @Service("processInvoice")
 public class ProcessInvoice {
 
-    @Resource(name = "invoiceDaoImpl")
-    private InvoiceDao invoiceDao;
-
     @Resource(name = "inventoryStateDaoImpl")
     private InventoryStateDao inventoryStateDao;
-
-    private ProcessInvoiceProductQuantity processInvoiceProductQuantity;
 
     private static final Logger LOGGER = Logger.getLogger(ProcessInvoice.class);
 
@@ -39,28 +32,23 @@ public class ProcessInvoice {
         List<Integer> productIdsList = getAllProductId(invoice.getInvoiceItems());
         List<InventoryState> inventoryStateList = inventoryStateDao.getInventoryStates(productIdsList);
         for (InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
-            InventoryState inventoryState = Iterables.find(inventoryStateList, new Predicate<InventoryState>() {
-                @Override
-                public boolean apply(InventoryState input) {
-                    return input.getInventoryStatePK().getProduct().getId().equals(invoiceItem.getProduct().getId());
-                }
-            });
-            InventoryState inventoryState1 = new InventoryState();
-            inventoryState1.setInventoryStatePK(new InventoryStatePK());
-            inventoryState1.setQuantity(inventoryState.getQuantity() + invoiceItem.getProductQuantity());
-            inventoryState1.getInventoryStatePK().setStateDate(LocalDateTime.now());
-            inventoryState1.getInventoryStatePK().setProduct(inventoryState.getInventoryStatePK().getProduct());
-            if (invoice.getType() == InvoiceType.IN) {
-                processInvoiceProductQuantity = new ProcessIncomingInvoice();
-                inventoryState1.setQuantity(processInvoiceProductQuantity
-                        .processProductQuantity(invoiceItem, inventoryState));
-            } else {
-                processInvoiceProductQuantity = new ProcessOutgoingInvoice();
-                inventoryState1.setQuantity(processInvoiceProductQuantity
-                        .processProductQuantity(invoiceItem, inventoryState));
-            }
-            inventoryStateDao.saveInventoryState(inventoryState1);
+            buildAndPersistInventoryState(invoice, inventoryStateList, invoiceItem);
         }
+    }
+
+    private void buildAndPersistInventoryState(Invoice invoice, List<InventoryState> inventoryStateList, InvoiceItem invoiceItem) {
+        InventoryState inventoryState = Iterables.find(inventoryStateList, new Predicate<InventoryState>() {
+            @Override
+            public boolean apply(InventoryState input) {
+                return input.getInventoryStatePK().getProduct().equals(invoiceItem.getProduct());
+            }
+        });
+        InventoryState inventoryState1 = new InventoryState();
+        inventoryState1.setInventoryStatePK(new InventoryStatePK());
+        inventoryState1.getInventoryStatePK().setStateDate(LocalDateTime.now());
+        inventoryState1.getInventoryStatePK().setProduct(inventoryState.getInventoryStatePK().getProduct());
+        inventoryState1.setQuantity(invoice.processProductQuantity(invoiceItem, inventoryState));
+        inventoryStateDao.saveInventoryState(inventoryState1);
     }
 
     public List<Integer> getAllProductId(Set<InvoiceItem> invoiceItems) {
