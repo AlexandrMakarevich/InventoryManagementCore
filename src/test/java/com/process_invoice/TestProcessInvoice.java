@@ -1,9 +1,9 @@
-package com;
+package com.process_invoice;
 
+import com.BaseTest;
 import com.builder.InventoryStateBuilder;
 import com.builder.InvoiceBuilder;
 import com.builder.InvoiceItemBuilder;
-import com.constant.InvoiceType;
 import com.dao.InventoryStateDao;
 import com.entity.InventoryState;
 import com.entity.Invoice;
@@ -14,6 +14,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.process.ProcessInvoice;
 import org.junit.Assert;
+
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
@@ -30,10 +31,8 @@ public abstract class TestProcessInvoice extends BaseTest {
 
     private InvoiceItemBuilder invoiceItemBuilder = new InvoiceItemBuilder();
     private InventoryStateBuilder inventoryStateBuilder = new InventoryStateBuilder();
-    private InvoiceBuilder invoiceBuilder;
 
-    public Invoice createInvoice(Map<Product, Integer> mapProductQuantity, InvoiceType invoiceType) {
-        invoiceBuilder = new InvoiceBuilder(invoiceType);
+    public Invoice createInvoice(Map<Product, Integer> mapProductQuantity, InvoiceBuilder invoiceBuilder) {
         Set<InvoiceItem> invoiceItems = new HashSet<>();
         for (Map.Entry<Product, Integer> entry : mapProductQuantity.entrySet()) {
             InvoiceItem invoiceItem = invoiceItemBuilder
@@ -43,10 +42,10 @@ public abstract class TestProcessInvoice extends BaseTest {
             invoiceItemBuilder.reset();
             invoiceItems.add(invoiceItem);
         }
-        Invoice invoice = invoiceBuilder
+        Invoice invoice1 = invoiceBuilder
                 .withSetInvoiceItems(invoiceItems)
                 .build();
-        return invoice;
+        return invoice1;
     }
 
     public void assertInventoryState(Map<Product, Integer> mapProductQuantity, Invoice invoice) {

@@ -1,11 +1,13 @@
-package com;
+package com.process_invoice;
 
+import com.builder.InvoiceBuilder;
 import com.builder.ProductPersistentBuilder;
 import com.constant.InvoiceType;
 import com.entity.Invoice;
 import com.entity.Product;
 import com.google.common.collect.ImmutableMap;
 import com.process.ProcessInvoice;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,6 +20,13 @@ public class TestProcessInvoiceOUT extends TestProcessInvoice {
 
     @Resource(name = "processInvoice")
     private ProcessInvoice processInvoice;
+
+    private InvoiceBuilder invoiceBuilder;
+
+    @Before
+    public void init() {
+        invoiceBuilder = new InvoiceBuilder(InvoiceType.OUT);
+    }
 
     @Rule
     public ExpectedException testRuleException = ExpectedException.none();
@@ -33,7 +42,7 @@ public class TestProcessInvoiceOUT extends TestProcessInvoice {
 
         createAndSaveInventoryState(ImmutableMap.of(product, existingQuantityForProduct));
 
-        Invoice invoice = createInvoice(ImmutableMap.of(product, quantityProductForInvoiceOUT), InvoiceType.OUT);
+        Invoice invoice = createInvoice(ImmutableMap.of(product, quantityProductForInvoiceOUT), invoiceBuilder);
 
         processInvoice.process(invoice);
 
@@ -50,7 +59,7 @@ public class TestProcessInvoiceOUT extends TestProcessInvoice {
         createAndSaveInventoryState(ImmutableMap.of(product, existingQuantityForProduct));
 
         Invoice invoice = createInvoice(ImmutableMap.of(product, quantityProductForInvoiceOUT)
-                , InvoiceType.OUT);
+                , invoiceBuilder);
 
         this.testRuleException.expect(IllegalStateException.class);
         String formattedString = String.format("You want %s product with id %s, but we have only %s",

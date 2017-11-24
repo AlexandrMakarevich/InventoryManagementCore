@@ -1,11 +1,13 @@
-package com;
+package com.process_invoice;
 
+import com.builder.InvoiceBuilder;
 import com.builder.ProductPersistentBuilder;
 import com.constant.InvoiceType;
 import com.entity.Invoice;
 import com.entity.Product;
 import com.google.common.collect.ImmutableMap;
 import com.process.ProcessInvoice;
+import org.junit.Before;
 import org.junit.Test;
 import javax.annotation.Resource;
 
@@ -16,6 +18,13 @@ public class TestProcessInvoiceIN extends TestProcessInvoice {
 
     @Resource(name = "productPersistentBuilder")
     private ProductPersistentBuilder productPersistentBuilder;
+
+    private InvoiceBuilder invoiceBuilder;
+
+    @Before
+    public void init() {
+        invoiceBuilder = new InvoiceBuilder(InvoiceType.IN);
+    }
 
     @Test
 //    @Rollback(false)
@@ -28,7 +37,7 @@ public class TestProcessInvoiceIN extends TestProcessInvoice {
         int quantityForProduct1 = 4;
 
         Invoice invoice = createInvoice(ImmutableMap.of(product, quantityForProduct,
-                product1, quantityForProduct1), InvoiceType.IN);
+                product1, quantityForProduct1), invoiceBuilder);
 
         processInvoice.process(invoice);
 
@@ -46,7 +55,7 @@ public class TestProcessInvoiceIN extends TestProcessInvoice {
         int expectedProductQuantity = quantityForProduct + existingQuantity;
         createAndSaveInventoryState(ImmutableMap.of(product, existingQuantity));
 
-        Invoice invoice = createInvoice(ImmutableMap.of(product, quantityForProduct), InvoiceType.IN);
+        Invoice invoice = createInvoice(ImmutableMap.of(product, quantityForProduct), invoiceBuilder);
 
         processInvoice.process(invoice);
 
@@ -67,7 +76,7 @@ public class TestProcessInvoiceIN extends TestProcessInvoice {
         createAndSaveInventoryState(ImmutableMap.of(product, existingProductQuantity));
 
         Invoice invoice = createInvoice(ImmutableMap.of(product, quantityForProduct1,
-                product1, quantityForProduct2), InvoiceType.IN);
+                product1, quantityForProduct2), invoiceBuilder);
 
         processInvoice.process(invoice);
 

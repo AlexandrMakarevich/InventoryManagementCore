@@ -13,6 +13,7 @@ public class InventoryState {
     @EmbeddedId
     private InventoryStatePK inventoryStatePK;
 
+
     @Column(name = "quantity")
     private Integer quantity;
 

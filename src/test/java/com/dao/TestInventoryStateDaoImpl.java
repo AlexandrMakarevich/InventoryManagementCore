@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TestInventoryStateDaoImpl extends BaseTest {
 
@@ -43,8 +44,6 @@ public class TestInventoryStateDaoImpl extends BaseTest {
         InvoiceItem invoiceItem = invoiceItemBuilder.withProduct(product).build();
 
         InventoryState actualInventoryState = inventoryStateDao.getInventoryStateByProductIdWhereMaxStateDate(invoiceItem);
-        System.out.println(inventoryState);
-        System.out.println(actualInventoryState);
         Assert.assertEquals("ActualInventoryState must be equal inventoryState", actualInventoryState, inventoryState);
     }
 
@@ -68,4 +67,9 @@ public class TestInventoryStateDaoImpl extends BaseTest {
         Assert.assertEquals("Actual result must be expected", actualInventoryState, inventoryState);
     }
 
+    @Test
+    public void testGetStateByDate() {
+        List<InventoryState> inventoryStateList = inventoryStateDao.getActualInventoryStateByDate(LocalDateTime.now());
+        System.out.println(inventoryStateList);
+    }
 }
