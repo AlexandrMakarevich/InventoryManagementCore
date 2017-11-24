@@ -1,0 +1,11 @@
+<div>
+sdsd
+{{#items}}
+productId: {{inventoryStatePK.product.id}}
+ProductName: {{inventoryStatePK.product.productName}}
+quantity: {{quantity}}
+  {{#features}}
+  Feature: {{description}}
+  {{/features}}
+{{/items}}
+</div>
