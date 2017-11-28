@@ -25,6 +25,9 @@ public class ReportProcessCSV implements ReportProcess {
                     .append(inventoryState.getQuantity())
                     .append(TAB_CHAR)
                     .append(inventoryState.getInventoryStatePK().getStateDate())
+                    .append(TAB_CHAR)
+                    .append(String.valueOf(inventoryState.getInventoryStatePK().getProduct().getPrice() *
+                            inventoryState.getQuantity()))
                     .append("\n");
             pwt.format(report.toString());
         }

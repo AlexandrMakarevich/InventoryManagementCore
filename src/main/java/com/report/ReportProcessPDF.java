@@ -29,7 +29,7 @@ public class ReportProcessPDF implements ReportProcess {
     }
 
     private PdfPTable createTable() {
-        float[] columnWidths = {1f, 4f, 2f, 4f};
+        float[] columnWidths = {1f, 2f, 2f, 3f, 2f};
         PdfPTable table = new PdfPTable(columnWidths);
         table.setWidthPercentage(100);
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -37,6 +37,7 @@ public class ReportProcessPDF implements ReportProcess {
         table.addCell("PRODUCT_NAME");
         table.addCell("QUANTITY");
         table.addCell("DATE");
+        table.addCell("TOTAL_PRICE");
         table.setHeaderRows(1);
         return table;
     }
@@ -53,6 +54,8 @@ public class ReportProcessPDF implements ReportProcess {
             table.addCell(inventoryState.getInventoryStatePK().getProduct().getProductName());
             table.addCell(inventoryState.getQuantity().toString());
             table.addCell(inventoryState.getInventoryStatePK().getStateDate().toString());
+            table.addCell(String.valueOf(inventoryState.getInventoryStatePK().getProduct().getPrice() *
+            inventoryState.getQuantity()));
         }
     }
 }

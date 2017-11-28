@@ -21,6 +21,17 @@ public class Product {
     @Column(name = "creation_date")
     private Instant creationDate;
 
+    @Column(name = "price")
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -72,7 +83,8 @@ public class Product {
                 "id=" + id +
                 ", productName='" + productName + '\'' +
                 ", description='" + description + '\'' +
-                ", creationDate=" + creationDate +
+                ", creationDate=" + creationDate + '\'' +
+                ", price=" + price +
                 '}';
     }
 }

@@ -16,6 +16,7 @@ public class ProductBuilder {
         product.setProductName("product1");
         product.setDescription("description1");
         product.setCreationDate(Instant.now());
+        product.setPrice(10.5);
     }
 
     public ProductBuilder withName(String productName) {
@@ -35,6 +36,11 @@ public class ProductBuilder {
 
     public ProductBuilder withDescription(String description) {
         product.setDescription(description);
+        return this;
+    }
+
+    public ProductBuilder withProductPrice(double price) {
+        product.setPrice(price);
         return this;
     }
 
