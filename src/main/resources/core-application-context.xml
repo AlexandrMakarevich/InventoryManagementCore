@@ -42,7 +42,7 @@
 
     <util:map id="initializerReport" key-type="com.constant.ReportFormat" value-type="com.report.ReportProcess">
         <entry key="CSV" value-ref="reportProcessCSV"/>
-        <entry key="PDF" value-ref="reportProcessCSV"/>
+        <entry key="PDF" value-ref="reportProcessPDF"/>
     </util:map>
     
 </beans>

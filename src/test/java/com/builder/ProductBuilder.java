@@ -1,6 +1,8 @@
 package com.builder;
 
 import com.entity.Product;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 
 public class ProductBuilder {
@@ -16,7 +18,7 @@ public class ProductBuilder {
         product.setProductName("product1");
         product.setDescription("description1");
         product.setCreationDate(Instant.now());
-        product.setPrice(10.5);
+        product.setPrice(new BigDecimal(10.5));
     }
 
     public ProductBuilder withName(String productName) {
@@ -39,7 +41,7 @@ public class ProductBuilder {
         return this;
     }
 
-    public ProductBuilder withProductPrice(double price) {
+    public ProductBuilder withProductPrice(BigDecimal price) {
         product.setPrice(price);
         return this;
     }

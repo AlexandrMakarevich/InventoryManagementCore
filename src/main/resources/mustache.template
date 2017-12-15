@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <link href="src/main/resources/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+
+    <body>
+        <table class="table" style="width:100%" border="1">
+            <tr class="title">
+                <th>PRODUCT_ID</th>
+                <th>PRODUCT_NAME</th>
+                <th>PRODUCT_PRICE</th>
+                <th>QUANTITY</th>
+                <th>DATE</th>
+            </tr>
+            {{#items}}
+            <tr class="body">
+                <td>{{inventoryStatePK.product.id}}</td>
+                <td>{{inventoryStatePK.product.productName}}</td>
+                <td>{{inventoryStatePK.product.price}}</td>
+                <td>{{quantity}}</td>
+                <td>{{inventoryStatePK.stateDate}}</td>
+            </tr>
+            {{/items}}
+            <tr>
+                <td class="down_column">
+                    TOTAL_PRICE : {{price}}
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+

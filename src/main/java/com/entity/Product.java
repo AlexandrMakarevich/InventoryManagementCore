@@ -2,6 +2,7 @@ package com.entity;
 
 import com.google.common.base.Objects;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -22,13 +23,13 @@ public class Product {
     private Instant creationDate;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

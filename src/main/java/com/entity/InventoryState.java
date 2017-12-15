@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "inventory_state")
@@ -13,9 +14,13 @@ public class InventoryState {
     @EmbeddedId
     private InventoryStatePK inventoryStatePK;
 
-
     @Column(name = "quantity")
     private Integer quantity;
+
+    public BigDecimal calculateItemCost() {
+        BigDecimal bigDecimalQuantity = BigDecimal.valueOf(quantity);
+        return inventoryStatePK.getProduct().getPrice().multiply(bigDecimalQuantity);
+    }
 
     public InventoryStatePK getInventoryStatePK() {
         return inventoryStatePK;

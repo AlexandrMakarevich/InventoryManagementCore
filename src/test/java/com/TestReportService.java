@@ -5,7 +5,7 @@ import com.itextpdf.text.DocumentException;
 import com.report.ReportService;
 import org.junit.Test;
 import javax.annotation.Resource;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class TestReportService extends BaseTest {
@@ -14,8 +14,8 @@ public class TestReportService extends BaseTest {
     private ReportService reportService;
 
     @Test
-    public void test() throws FileNotFoundException, DocumentException {
-        String fileName = "target/report.csv";
-        reportService.generateReport(LocalDateTime.now(), ReportFormat.CSV, fileName);
+    public void test() throws IOException, DocumentException {
+        String fileName = "target/report.pdf";
+        reportService.generateReport(LocalDateTime.now(), ReportFormat.PDF, fileName);
     }
 }
